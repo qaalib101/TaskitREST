@@ -16,12 +16,16 @@ public class TaskItem{
     private long id;
 
     private String title;
+    private String description;
+    private String comments;
     private Date dueDate;
     private Date CreationDate;
 
 
-    public TaskItem(String title, Date dueDate) {
+    public TaskItem(String title, Date dueDate, String description, String comments) {
         this.title = title;
+        this.comments = comments;
+        this.description = description;
         this.dueDate = dueDate;
         this.CreationDate = new Date();
     }
