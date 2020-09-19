@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest
 class TaskItApplicationTests {
     String taskExamples = "[{\"title\":\"New Task\", \"description\":\"Work on this new item\", " +
-            "\"dueDate\":\"01/01/3000\", \"comments\":\"\"}]";;
+            "\"dueDate\":\"01/01/3000\", \"comments\":\"\"}]";
     @Autowired
     private MockMvc mockMvc;
 

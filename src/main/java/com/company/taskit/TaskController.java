@@ -1,6 +1,7 @@
 package com.company.taskit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.json.JSONException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,7 @@ public class TaskController {
         return tasks;
     }
     @RequestMapping(value = "/newTasks", method = RequestMethod.POST)
-    public String newtasks(@RequestBody String payload) throws ParseException {
+    public String newtasks(@RequestBody String payload) throws ParseException, JSONException {
         db.newTask(payload);
         return payload;
     }

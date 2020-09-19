@@ -2,8 +2,10 @@ package com.company.taskit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.util.List;
@@ -12,24 +14,24 @@ import java.util.ArrayList;
 public class DatabaseController{
 
     //create private instance of repository
-    private TaskManager tm;
+    @Autowired
+    private TaskService service;
 
     //function that gets the raw payload and create a task item
-    public List<TaskItem> newTask(String payload) throws ParseException {
+    public List<TaskItem> newTask(String payload) throws ParseException, JSONException {
         JSONArray arr = new JSONArray(payload);
         List<TaskItem> list = new ArrayList<TaskItem>();
-        for(int i = 0; i < arr.length(); i++){
+        for(int i = 0; i < arr.length(); i++) {
             JSONObject obj = arr.getJSONObject(i);
             TaskItem task = new TaskItem(obj);
             list.add(task);
         }
-//      tm.saveAll(list);
-        return list;
+        return (ArrayList<TaskItem>) service.saveAll(list);
     }
 
     //function that gets all the tasks and returns a string
     public String GetAllTasks() throws JsonProcessingException {
-        ArrayList<TaskItem> itemList = (ArrayList<TaskItem>) tm.findAll();
+        ArrayList<TaskItem> itemList = (ArrayList<TaskItem>) service.findAll();
         String results = tasksToJSON(itemList);
         return results;
     }
@@ -50,12 +52,12 @@ public class DatabaseController{
 
     /*
     function that gets keys and values for search params
-    params: String "[{key:value}]"
+    params: String "{key:value, key: value}"
     returns: List<TaskItem>
     */
-    public List<TaskItem> getTasks(String searchParams){
-        JSONArray arr = new JSONArray(searchParams);
-        List<TaskItem> list = tm.filterTasks(arr);
+    public List<TaskItem> getTasks(String searchParams) throws JSONException {
+        JSONObject obj = new JSONObject(searchParams);
+        ArrayList<TaskItem> list = (ArrayList<TaskItem>) service.search(obj);
         return list;
     }
 

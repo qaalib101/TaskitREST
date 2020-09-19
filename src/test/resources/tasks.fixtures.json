@@ -1,0 +1,14 @@
+{
+  "taskitem1": {
+    "title": "New task",
+    "description": "Work on this new item",
+    "dueDate": "01/01/3000",
+    "comments": ""
+  },
+  "taskitem2": {
+    "title": "Task 1",
+    "description": "Fake description",
+    "dueDate": "01/01/3000",
+    "comments": ""
+  }
+}
