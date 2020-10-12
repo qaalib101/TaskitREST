@@ -6,14 +6,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+@Service
 public class DatabaseController{
 
-    //create private instance of repository
     @Autowired
     private TaskService service;
 
@@ -59,6 +61,35 @@ public class DatabaseController{
         JSONObject obj = new JSONObject(searchParams);
         ArrayList<TaskItem> list = (ArrayList<TaskItem>) service.search(obj);
         return list;
+    }
+
+    /*
+    function that creates JSONObjects from payload and requests service to delete tasks
+    params: String "{id: 1}"
+    returns: null
+    */
+    public void deleteTaskItems(String payload) throws JSONException{
+        JSONObject obj = new JSONObject(payload);
+        service.deleteById((long) obj.get("id"));
+    }
+
+    /*
+    function gets task object and sets fields. Then save
+    params: String "[{}]"
+    */
+    public Iterable<TaskItem> updateTask(String payload) throws JSONException{
+        JSONArray arr = new JSONArray(payload);
+        ArrayList<TaskItem> list = new ArrayList<>();
+        for(int i = 0; i < arr.length(); i++){
+            JSONObject obj = (JSONObject) arr.get(i);
+            TaskItem task = service.getOne((long) obj.get("id"));
+            task.setComments((String) obj.get("comments"));
+            task.setDueDate((Date) obj.get("dueDate"));
+            task.setTitle((String) obj.get("title"));
+            task.setDescription((String) obj.get("description"));
+            list.add(task);
+        }
+        return service.saveAll(list);
     }
 
 }

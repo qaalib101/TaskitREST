@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mortbay.thread.Timeout;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class TaskService {
 
     private QTaskItem task = QTaskItem.taskItem;
 
-    private final TaskRepository repo;
-
-    public TaskService(TaskRepository repo) {
-        this.repo=repo;
-    }
+    //create private instance of repository
+    @Autowired
+    private TaskRepository repo;
 
     /* Search function that
     inputs JSONArray [{"title": "work on"}, {"description": "example"}]
@@ -48,5 +46,17 @@ public class TaskService {
 
     public Iterable<TaskItem> saveAll(Iterable<TaskItem> list){
         return repo.saveAll(list);
+    }
+
+    public void deleteById(long id){
+        repo.deleteById(id);
+    }
+
+    public TaskItem getOne(long id){
+        return repo.getOne(id);
+    }
+
+    public long getCount(){
+        return repo.count();
     }
 }

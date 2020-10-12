@@ -55,6 +55,10 @@ public class TaskItem{
         this.id = id;
     }
 
+    public String getTitle(String title) {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -90,6 +94,5 @@ public class TaskItem{
     public void setCreationDate(Date creationDate) {
         CreationDate = creationDate;
     }
-
 
 }

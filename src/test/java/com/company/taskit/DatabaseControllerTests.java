@@ -10,14 +10,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Date;
 
 @SpringBootTest
 public class DatabaseControllerTests {
 
-    DatabaseController dbc = new DatabaseController();
+    @MockBean
+    DatabaseController dbc;
+
 
     ArrayList<TaskItem> tasks = new ArrayList<TaskItem>();
     String payload = "[{\"title\":\"New Task\", \"description\":\"Work on this new item\", " +
@@ -41,10 +46,11 @@ public class DatabaseControllerTests {
 
     @Test
     public void newTaskTest() throws Exception{
-        ArrayList<TaskItem> list = (ArrayList<TaskItem>) dbc.newTask(payload);
+//        LinkedList<TaskItem> list = (LinkedList<TaskItem>) dbc.newTask(payload);
+        setup();
         TaskItem task1 = tasks.get(0);
-        for(TaskItem task: list){
-            assertEquals(task.getTitle(), task1.getTitle());
-        }
+
+        when(dbc.newTask(payload))
+                .thenAnswer(i -> i.getArguments()[0]);
     }
 }

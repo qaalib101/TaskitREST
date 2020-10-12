@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.function.Predicate;
 
+@Repository
+@Transactional(readOnly = true)
 public interface TaskRepository extends JpaRepository<TaskItem, Long>, QuerydslPredicateExecutor<TaskItem> {
 
 }
