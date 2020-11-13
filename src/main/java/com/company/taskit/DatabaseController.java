@@ -57,10 +57,11 @@ public class DatabaseController{
     params: String "{key:value, key: value}"
     returns: List<TaskItem>
     */
-    public List<TaskItem> getTasks(String searchParams) throws JSONException {
+    public String searchTasks(String searchParams) throws JSONException, JsonProcessingException {
         JSONObject obj = new JSONObject(searchParams);
-        ArrayList<TaskItem> list = (ArrayList<TaskItem>) service.search(obj);
-        return list;
+        ArrayList<TaskItem> list = (ArrayList<TaskItem>) service.searchByKeyword(obj);
+        String tasks = tasksToJSON(list);
+        return tasks;
     }
 
     /*

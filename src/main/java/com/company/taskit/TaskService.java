@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @Service
 public class TaskService {
@@ -26,18 +27,31 @@ public class TaskService {
     private TaskRepository repo;
 
     /* Search function that
-    inputs JSONArray [{"title": "work on"}, {"description": "example"}]
+    inputs JSONArray [{"title": "work on"}, {"description": "example"}, {"dueDate": "20000101-30000101"}]
     and returns
     * */
     public Iterable<TaskItem> search(JSONObject obj) throws JSONException {
-        Predicate title = task.title.contains(obj.get("title").toString());
-        Predicate description = task.description.contains(obj.get("description").toString());
+        Predicate title, description, dueDate;
 
-        BooleanExpression exp = JPAExpressions.selectOne().from(task).where(
-                title,description
-        ).exists();
+        if(obj.get("title").toString() == "" ){
+            title = task.title.contains("");
+        }else{
+            title = task.title.contains(obj.get("title").toString());
+        }
+        if(obj.get("description").toString() == ""){
+            description = task.description.contains("");
+        }
+        else{
+            description = task.description.contains(obj.get("description").toString());
+        }
+//        Date fromDate = new Date();
+//        Date toDate = new Date();
+//        dueDate = task.dueDate.between();
+//        BooleanExpression exp = JPAExpressions.selectOne().from(task).where(
+//                title,description
+//        ).exists();
 
-        return repo.findAll(exp);
+        return repo.findAll();
     }
 
     public Iterable<TaskItem> findAll(){
@@ -58,5 +72,13 @@ public class TaskService {
 
     public long getCount(){
         return repo.count();
+    }
+
+    public Iterable<TaskItem> searchByKeyword(JSONObject obj) throws JSONException{
+        String desctiption = obj.get("description").toString();
+        String title = obj.get("title").toString();
+        String comments = obj.get("comments").toString();
+
+        return repo.search(desctiption, title, comments);
     }
 }

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Date;
+import org.json.JSONObject;
 
 @SpringBootTest
 public class TaskServiceTests {
@@ -73,4 +74,17 @@ public class TaskServiceTests {
             assertEquals(list.get(i).getDescription(), tasks.get(i).getDescription());
         }
     }
+
+    @Test
+    @Transactional
+    public void testTaskSearchByTitle() throws Exception{
+        setup();
+        service.saveAll(tasks);
+        JSONObject obj = new JSONObject("{\"title\":\"title\", \"description\":\"\",\"comments\":\"\" ,\"dueDate\":\"20201001-30000101\"}");
+        ArrayList<TaskItem> list = (ArrayList) service.searchByKeyword(obj);
+
+        assertEquals(list.get(0).getId(), tasks.get(0).getId());
+    }
+
+
 }

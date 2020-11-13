@@ -55,7 +55,7 @@ public class TaskItem{
         this.id = id;
     }
 
-    public String getTitle(String title) {
+    public String getTitle() {
         return title;
     }
 
