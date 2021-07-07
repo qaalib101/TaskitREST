@@ -25,15 +25,24 @@ public class TaskController {
     }
 
     @RequestMapping("/getTasks")
-    public String getTasks() throws JsonProcessingException {
-        String tasks = db.GetAllTasks();
-        return tasks;
+    public String getTasks(@RequestBody String payload) throws JsonProcessingException {
+        try{
+            String tasks = db.GetAllTasks(Integer.parseInt(payload));
+            return tasks;
+        }catch (Exception e){
+            String message = e.toString();
+            return "{\"Response\":\"Failed\", \"Information\" :\""+ message +"\"}";
+        }
     }
 
-    @RequestMapping(value = "/newTasks", method = RequestMethod.POST, consumes = "text/plain")
+    @RequestMapping(value = "/newTask", method = RequestMethod.POST, consumes = "text/plain")
     public String newtasks(@RequestBody String payload) throws ParseException, JSONException {
-        db.newTask(payload);
-        return payload;
+        try{
+            TaskItem task = db.newTask(payload);
+            return "New Task created: " + task.toString();
+        }catch (Exception e){
+            String message = e.toString();
+            return "{\"Response\":\"Failed\", \"Information\" :\""+ message +"\"}";        }
     }
 
     @RequestMapping(value = "/updateTasks", method = RequestMethod.POST, consumes = "text/plain")
@@ -60,7 +69,13 @@ public class TaskController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST, consumes = "text/plain")
     public String search(@RequestBody String payload) throws JSONException, JsonProcessingException {
-        String tasks = db.searchTasks(payload);
+        String tasks = db.findTasks(payload);
+        return tasks;
+    }
+
+    @RequestMapping(value = "/maxId", method = RequestMethod.GET)
+    public String maxId(@RequestBody String payload) throws JSONException, JsonProcessingException {
+        String tasks = db.findTasks(payload);
         return tasks;
     }
 }

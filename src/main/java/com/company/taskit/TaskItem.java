@@ -1,11 +1,15 @@
 package com.company.taskit;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +27,7 @@ public class TaskItem{
     private String description;
     private String comments;
     private Date dueDate;
-    private Date CreationDate;
+    private Date creationDate;
 
 
     public TaskItem(String title, Date dueDate, String description, String comments) {
@@ -31,7 +35,7 @@ public class TaskItem{
         this.comments = comments;
         this.description = description;
         this.dueDate = dueDate;
-        this.CreationDate = new Date();
+        this.creationDate = new Date();
     }
 
     public TaskItem(JSONObject obj) throws ParseException, JSONException {
@@ -40,7 +44,7 @@ public class TaskItem{
         this.description = (String) obj.get("description");
         String date = (String) obj.get("dueDate");
         this.dueDate = new SimpleDateFormat("MM/dd/yyyy").parse(date);
-        this.CreationDate = new Date();
+        this.creationDate = new Date();
     }
 
     public TaskItem() {
@@ -88,11 +92,22 @@ public class TaskItem{
     }
 
     public Date getCreationDate() {
-        return CreationDate;
+        return creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
-        CreationDate = creationDate;
+        this.creationDate = creationDate;
     }
 
+    @Override
+    public String toString(){
+
+        return "{id: " + String.valueOf(id) +
+                ", title: " + this.title +
+                ", description: " + this.description +
+                ", comments: " + this.comments +
+                ", dueDate: " + this.dueDate.toString() +
+                ", creationDate: " + this.creationDate.toString() +
+                " }";
+    }
 }

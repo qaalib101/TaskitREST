@@ -1,5 +1,6 @@
 package com.company.taskit;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,15 +21,15 @@ import java.util.Date;
 @SpringBootTest
 public class DatabaseControllerTests {
 
-    @MockBean
     DatabaseController dbc;
-
 
     ArrayList<TaskItem> tasks = new ArrayList<TaskItem>();
     String payload = "[{\"title\":\"New Task\", \"description\":\"Work on this new item\", " +
             "\"dueDate\":\"01/01/3000\", \"comments\":\"\"}]";
 
+    @Before
     public void setup(){
+        this.dbc = new DatabaseController();
         Date dueDate = new Date();
         TaskItem task1 = new TaskItem("New title", dueDate,"Solve issue #124", "");
         TaskItem task2 = new TaskItem("Issue #136", dueDate,"Solve issue #136", "");
@@ -38,7 +39,6 @@ public class DatabaseControllerTests {
 
     @Test
     public void tasksToJSONTest() throws Exception{
-        setup();
         String actual = dbc.tasksToJSON(tasks);
         String expected = "";
         assertEquals(expected, actual);
